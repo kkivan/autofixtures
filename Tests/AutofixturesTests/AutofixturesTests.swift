@@ -60,7 +60,7 @@ final class AutofixturesTests: XCTestCase {
         enum Enum: Autofixture {
             case one
 
-            static var fix = Enum.one
+            static let fix = Enum.one
         }
 
         XCTAssertEqual(Enum.fix, .one)
@@ -70,7 +70,7 @@ final class AutofixturesTests: XCTestCase {
         enum EnumWithValue: Autofixture, Equatable {
             case value(Simple)
 
-            static var fix = EnumWithValue.value(.decoded)
+            static let fix = EnumWithValue.value(.decoded)
         }
 
         XCTAssertEqual(EnumWithValue.fix, .value(.decoded))

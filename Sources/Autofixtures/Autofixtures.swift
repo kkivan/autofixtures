@@ -22,5 +22,5 @@ extension Decodable {
 //    let id: Int
 //    var email: String
 //
-//    static var fix = Self.fix.prop(\.email, "email")
+//    static let fix = Self.fix.prop(\.email, "email")
 //}
