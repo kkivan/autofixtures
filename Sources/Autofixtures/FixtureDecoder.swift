@@ -6,9 +6,15 @@ struct FixtureDecoder: Decoder {
     var userInfo: [CodingUserInfoKey : Any] = [:]
 
     struct KeyedContainer<Key: CodingKey>: KeyedDecodingContainerProtocol {
-        var codingPath: [CodingKey] = []
+        let allKeys: [Key]
+        let codingPath: [CodingKey]
+        let decoder: FixtureDecoder
 
-        var allKeys: [Key] = []
+        init(decoder: FixtureDecoder) {
+            self.allKeys = [.init(stringValue: "FIX")].compactMap { $0 }
+            self.codingPath = decoder.codingPath
+            self.decoder = decoder
+        }
 
         func contains(_ key: Key) -> Bool {
             true
@@ -22,7 +28,7 @@ struct FixtureDecoder: Decoder {
             if let t = type as? Autofixture.Type {
                 return t.fix as! T
             }
-            return try type.init(from: FixtureDecoder())
+            return try type.init(from: decoder)
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -43,7 +49,7 @@ struct FixtureDecoder: Decoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key : CodingKey {
-        return .init(KeyedContainer())
+        return .init(KeyedContainer(decoder: self))
     }
 
     struct UnkeyedContainer: UnkeyedDecodingContainer {

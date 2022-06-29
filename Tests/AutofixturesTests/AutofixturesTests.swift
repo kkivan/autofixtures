@@ -7,7 +7,7 @@ struct Simple: Decodable, Hashable, Equatable {
 }
 
 extension Decodable {
-    // This method need for testing cases when type doesn't comform to fixture
+    /// This method is for testing cases when type doesn't comform to Autofixture, use static var fix in your test code
     static var decoded: Self { try! Self(from: FixtureDecoder()) }
 }
 
@@ -45,7 +45,6 @@ final class AutofixturesTests: XCTestCase {
 
     func testSetOfSimples() {
         let decoded = Set<Simple>.decoded
-
         XCTAssertEqual(decoded.count, 1)
         XCTAssertEqual(decoded.first, Simple.decoded)
     }
@@ -81,7 +80,8 @@ final class AutofixturesTests: XCTestCase {
         XCTAssertEqual(Optional<Simple>.decoded, nil)
     }
 
-    func testDictionary() {
+    func testStringDictionary() {
+        XCTAssertEqual([String: String].decoded, [.decoded: .decoded])
         XCTAssertEqual([String: Simple].decoded, [.decoded: .decoded])
     }
 
@@ -90,7 +90,7 @@ final class AutofixturesTests: XCTestCase {
             var name: String
         }
         let fix = Auto.fix
-            .prop(\.name, "not a fixture")
-        XCTAssertEqual(fix.name, "not a fixture")
+            .prop(\.name, "updated")
+        XCTAssertEqual(fix.name, "updated")
     }
 }
