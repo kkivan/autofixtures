@@ -82,7 +82,7 @@ final class AutofixturesTests: XCTestCase {
     }
 
     func testDictionary() {
-        XCTAssertEqual([String: Simple].decoded, ["FIX": Simple.decoded])
+        XCTAssertEqual([String: Simple].decoded, [.decoded: .decoded])
     }
 
     func testProp() {
