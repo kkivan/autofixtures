@@ -1,11 +1,6 @@
 import XCTest
 @testable import Autofixtures
 
-struct Simple: Decodable, Hashable, Equatable {
-    let id: Int
-    let string: String
-}
-
 extension Decodable {
     /// This method is for testing cases when type doesn't comform to Autofixture, use static var fix in your test code
     static var decoded: Self { try! Self(from: FixtureDecoder()) }
@@ -17,6 +12,11 @@ final class AutofixturesTests: XCTestCase {
         XCTAssertEqual(String.decoded, "FIX")
         XCTAssertEqual(Int.decoded, 333)
         XCTAssertEqual(Int.decoded, 333)
+    }
+
+    struct Simple: Decodable, Hashable, Equatable {
+        let id: Int
+        let string: String
     }
 
     func testStruct() {
@@ -92,5 +92,22 @@ final class AutofixturesTests: XCTestCase {
         let fix = Auto.fix
             .prop(\.name, "updated")
         XCTAssertEqual(fix.name, "updated")
+    }
+
+    func testClosure() {
+        struct WithClosure: Decodable {
+            let id: Int
+            let closure: Closure<Void, Void>
+        }
+        XCTAssertEqual(WithClosure.decoded.id, 333)
+    }
+}
+
+/// Closure wrapper for decodable support
+struct Closure<A,B>: Decodable {
+    var closure: (A) -> B
+
+    init(from decoder: Decoder) throws {
+        self.closure = { a in fatalError() }
     }
 }
