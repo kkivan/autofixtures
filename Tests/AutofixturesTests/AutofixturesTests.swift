@@ -96,10 +96,16 @@ final class AutofixturesTests: XCTestCase {
 
     func testClosure() {
         struct WithClosure: Decodable {
-            let id: Int
             let closure: Closure<Void, Void>
         }
-        XCTAssertEqual(WithClosure.decoded.id, 333)
+        XCTAssertNotNil(WithClosure.decoded)
+    }
+
+    func testClosureWithOverridenValue() {
+        struct WithClosure: Decodable {
+            let closure: Closure<Void, Int>
+        }
+        XCTAssertEqual(WithClosure.decoded.closure.closure(()), 9)
     }
 }
 
@@ -110,4 +116,10 @@ struct Closure<A,B>: Decodable {
     init(from decoder: Decoder) throws {
         self.closure = { a in fatalError() }
     }
+}
+
+/// Example of setting up default for closure
+extension Closure: Autofixture where A == Void, B == Int {
+    static var fix: Closure<(), Int> = .fix
+        .prop(\.closure, { return 9 })
 }
