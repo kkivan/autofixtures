@@ -1,11 +1,16 @@
 import Foundation
 
-public protocol Autofixture: Decodable {
+public protocol Override: Decodable {
     static var fix: Self { get }
 }
 
-public extension Autofixture {
-    static var fix: Self { try! Self(from: FixtureDecoder()) }
+public extension Decodable {
+    static var fix: Self {
+        guard let override = Self.self as? Override.Type else {
+            return try! Self(from: FixtureDecoder())
+        }
+        return override.fix as! Self
+    }
 }
 
 public extension Decodable {
@@ -18,9 +23,6 @@ public extension Decodable {
 }
 
 // How to make custom fixtures
-//struct User: Autofixture {
-//    let id: Int
-//    var email: String
-//
+//extension User: Override {
 //    static let fix = Self.fix.prop(\.email, "email")
 //}

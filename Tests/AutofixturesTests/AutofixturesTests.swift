@@ -1,92 +1,90 @@
 import XCTest
 @testable import Autofixtures
 
-extension Decodable {
-    /// This method is for testing cases when type doesn't comform to Autofixture, use static var fix in your test code
-    static var decoded: Self { try! Self(from: FixtureDecoder()) }
+enum Enum: Decodable {
+    case one
+}
+
+extension Enum: Override {
+    static let fix = Enum.one
+}
+
+struct Simple: Decodable, Hashable, Equatable {
+    let id: Int
+    let string: String
+    let enumeration: Enum
 }
 
 final class AutofixturesTests: XCTestCase {
 
     func testAtomic() {
-        XCTAssertEqual(String.decoded, "FIX")
-        XCTAssertEqual(Int.decoded, 333)
-        XCTAssertEqual(Int.decoded, 333)
-    }
-
-    struct Simple: Decodable, Hashable, Equatable {
-        let id: Int
-        let string: String
+        XCTAssertEqual(String.fix, "FIX")
+        XCTAssertEqual(Int.fix, 333)
+        XCTAssertEqual(Int.fix, 333)
     }
 
     func testStruct() {
-        XCTAssertEqual(Simple.decoded.id, Int.decoded)
-        XCTAssertEqual(Simple.decoded.string, String.decoded)
+        XCTAssertEqual(Simple.fix.id, Int.fix)
+        XCTAssertEqual(Simple.fix.string, String.fix)
     }
 
     func testNested() {
         struct Nested: Decodable {
             let nested: Simple
         }
-        XCTAssertEqual(Nested.decoded.nested.id, Int.decoded)
-        XCTAssertEqual(Nested.decoded.nested.string, String.decoded)
+        XCTAssertEqual(Nested.fix.nested.id, Int.fix)
+        XCTAssertEqual(Nested.fix.nested.string, String.fix)
     }
 
     func testArrayOfStrings() {
-        let decoded = [String].decoded
+        let decoded = [String].fix
         XCTAssertEqual(decoded.count, 1)
-        XCTAssertEqual(decoded[0], String.decoded)
+        XCTAssertEqual(decoded[0], String.fix)
     }
     func testArrayOfSimples() {
-        let decoded = [Simple].decoded
+        let decoded = [Simple].fix
         XCTAssertEqual(decoded.count, 1)
-        XCTAssertEqual(decoded.first, Simple.decoded)
+        XCTAssertEqual(decoded.first, Simple.fix)
     }
 
     func testSetOfSimples() {
-        let decoded = Set<Simple>.decoded
+        let decoded = Set<Simple>.fix
         XCTAssertEqual(decoded.count, 1)
-        XCTAssertEqual(decoded.first, Simple.decoded)
+        XCTAssertEqual(decoded.first, Simple.fix)
     }
 
     func testGeneric() {
         struct Generic<A: Decodable>: Decodable {
             let a: A
         }
-        XCTAssertEqual(Generic<Simple>.decoded.a, Simple.decoded)
+        XCTAssertEqual(Generic<Simple>.fix.a, Simple.fix)
     }
 
     func testEnum() {
-        enum Enum: Autofixture {
-            case one
-
-            static let fix = Enum.one
-        }
-
-        XCTAssertEqual(Enum.fix, .one)
+        XCTAssertEqual(Simple.fix.enumeration, .one)
     }
 
     func testEnumWithAssociatedValue() {
-        enum EnumWithValue: Autofixture, Equatable {
+        enum EnumWithValue: Override, Equatable {
             case value(Simple)
 
-            static let fix = EnumWithValue.value(.decoded)
+            static let fix = EnumWithValue.value(.fix)
         }
 
-        XCTAssertEqual(EnumWithValue.fix, .value(.decoded))
+        XCTAssertEqual(EnumWithValue.fix, .value(.fix))
     }
 
     func testOptional() {
-        XCTAssertEqual(Optional<Simple>.decoded, nil)
+        XCTAssertEqual(Optional<Simple>.fix, nil)
     }
 
     func testStringDictionary() {
-        XCTAssertEqual([String: String].decoded, [.decoded: .decoded])
-        XCTAssertEqual([String: Simple].decoded, [.decoded: .decoded])
+        XCTAssertEqual([String: String].fix, [.fix: .fix])
+        XCTAssertEqual([String: Simple].fix, [.fix: .fix])
     }
 
     func testProp() {
-        struct Auto: Autofixture {
+        struct Auto: Decodable {
             var name: String
         }
         let fix = Auto.fix
@@ -98,14 +96,14 @@ final class AutofixturesTests: XCTestCase {
         struct WithClosure: Decodable {
             let closure: Closure<Void, Void>
         }
-        XCTAssertNotNil(WithClosure.decoded)
+        XCTAssertNotNil(WithClosure.fix)
     }
 
     func testClosureWithOverridenValue() {
         struct WithClosure: Decodable {
             let closure: Closure<Void, Int>
         }
-        XCTAssertEqual(WithClosure.decoded.closure.closure(()), 9)
+        XCTAssertEqual(WithClosure.fix.closure.closure(()), 9)
     }
 }
 
@@ -119,7 +117,7 @@ struct Closure<A,B>: Decodable {
 }
 
 /// Example of setting up default for closure
-extension Closure: Autofixture where A == Void, B == Int {
+extension Closure: Override where A == Void, B == Int {
     static var fix: Closure<(), Int> = .fix
         .prop(\.closure, { return 9 })
 }

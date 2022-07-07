@@ -25,10 +25,7 @@ struct FixtureDecoder: Decoder {
         }
 
         func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T : Decodable {
-            if let t = type as? Autofixture.Type {
-                return t.fix as! T
-            }
-            return try type.init(from: decoder)
+            T.fix
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -126,7 +123,7 @@ struct FixtureDecoder: Decoder {
         func decode(_ type: UInt64.Type) throws -> UInt64 { 333 }
 
         func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-            return try type.init(from: FixtureDecoder())
+            T.fix
         }
     }
 
