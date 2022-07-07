@@ -1,7 +1,7 @@
 import XCTest
 @testable import Autofixtures
 
-enum Enum: Decodable {
+enum Enum: String, Decodable {
     case one
 }
 
@@ -11,9 +11,17 @@ extension Enum: Override {
 
 struct Simple: Decodable, Hashable, Equatable {
     let id: Int
-    let string: String
+    var string: String
     let enumeration: Enum
 }
+
+struct Nested: Decodable {
+    let nested: Simple
+}
+
+//extension Simple: Override {
+//    static let fix: Simple = .fix.prop(\.string, "NAME")
+//}
 
 final class AutofixturesTests: XCTestCase {
 
@@ -24,14 +32,13 @@ final class AutofixturesTests: XCTestCase {
     }
 
     func testStruct() {
-        XCTAssertEqual(Simple.fix.id, Int.fix)
-        XCTAssertEqual(Simple.fix.string, String.fix)
+        let fix = Simple.fix
+        XCTAssertEqual(fix.id, Int.fix)
+        XCTAssertEqual(fix.string, String.fix)
     }
 
     func testNested() {
-        struct Nested: Decodable {
-            let nested: Simple
-        }
+        let fix = Nested.fix
         XCTAssertEqual(Nested.fix.nested.id, Int.fix)
         XCTAssertEqual(Nested.fix.nested.string, String.fix)
     }
@@ -65,7 +72,7 @@ final class AutofixturesTests: XCTestCase {
     }
 
     func testEnumWithAssociatedValue() {
-        enum EnumWithValue: Override, Equatable {
+        enum EnumWithValue: Decodable, Equatable {
             case value(Simple)
 
             static let fix = EnumWithValue.value(.fix)

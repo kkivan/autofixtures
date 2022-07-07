@@ -6,10 +6,7 @@ public protocol Override: Decodable {
 
 public extension Decodable {
     static var fix: Self {
-        guard let override = Self.self as? Override.Type else {
-            return try! Self(from: FixtureDecoder())
-        }
-        return override.fix as! Self
+        try! .init(from: FixtureDecoder())
     }
 }
 
