@@ -109,3 +109,7 @@ extension Closure: Override where A == Void, B == Int {
         .set(\.closure, { return 9 })
 }
 ```
+
+# Installation
+
+Swift Package Manager
