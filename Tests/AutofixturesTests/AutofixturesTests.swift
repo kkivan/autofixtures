@@ -130,4 +130,3 @@ extension Closure: Override where A == Void, B == Int {
     static var fixOverride: Closure<(), Int> = .fixDecoded
         .set(\.closure, { return 9 })
 }
-}
