@@ -10,14 +10,14 @@ extension Enum: Override {
 }
 
 struct Simple: Decodable, Hashable, Equatable {
-    let id: Int
-    let double: Double
+    var id: Int
+    var double: Double
     var string: String
-    let enumeration: Enum
+    var enumeration: Enum
 }
 
 struct Nested: Decodable {
-    let nested: Simple
+    var nested: Simple
 }
 
 extension Simple: Override {
