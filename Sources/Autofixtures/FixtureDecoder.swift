@@ -17,18 +17,15 @@ struct FixtureDecoder: Decoder {
         }
 
         func contains(_ key: Key) -> Bool {
-            false
+            true
         }
 
         func decodeNil(forKey key: Key) throws -> Bool {
-            false
+            true
         }
 
         func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T : Decodable {
-            guard let override = type as? Override.Type else {
-                return T.fix
-            }
-            return override.fix as! T
+            T.fix
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -56,7 +53,7 @@ struct FixtureDecoder: Decoder {
 
         mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
             currentIndex += 1
-            return try SingleValueContainer().decode(type)
+            return T.fix
         }
 
         mutating func decode(_ type: Bool.Type) throws -> Bool {
@@ -126,10 +123,7 @@ struct FixtureDecoder: Decoder {
         func decode(_ type: UInt64.Type) throws -> UInt64 { 333 }
 
         func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-            guard let override = type as? Override.Type else {
-                return T.fix
-            }
-            return override.fix as! T
+            T.fix
         }
     }
 

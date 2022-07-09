@@ -6,11 +6,12 @@ enum Enum: String, Decodable {
 }
 
 extension Enum: Override {
-    static let fix = Enum.one
+    static let fixOverride: Enum = Enum.one
 }
 
 struct Simple: Decodable, Hashable, Equatable {
     let id: Int
+    let double: Double
     var string: String
     let enumeration: Enum
 }
@@ -19,9 +20,9 @@ struct Nested: Decodable {
     let nested: Simple
 }
 
-//extension Simple: Override {
-//    static let fix: Simple = .fix.prop(\.string, "NAME")
-//}
+extension Simple: Override {
+    static var fixOverride: Simple = Simple.fixDecoded.set(\.string, "NAME")
+}
 
 final class AutofixturesTests: XCTestCase {
 
@@ -32,15 +33,16 @@ final class AutofixturesTests: XCTestCase {
     }
 
     func testStruct() {
-        let fix = Simple.fix
-        XCTAssertEqual(fix.id, Int.fix)
-        XCTAssertEqual(fix.string, String.fix)
+        let fix = Simple.fixDecoded
+        XCTAssertNotEqual(fix.id, 0)
+        XCTAssertEqual(fix.id, 333)
+        XCTAssertEqual(fix.string, "FIX")
     }
 
     func testNested() {
         let fix = Nested.fix
-        XCTAssertEqual(Nested.fix.nested.id, Int.fix)
-        XCTAssertEqual(Nested.fix.nested.string, String.fix)
+        XCTAssertEqual(fix.nested.id, Int.fix)
+        XCTAssertEqual(fix.nested.string, "NAME")
     }
 
     func testArrayOfStrings() {
@@ -51,13 +53,13 @@ final class AutofixturesTests: XCTestCase {
     func testArrayOfSimples() {
         let decoded = [Simple].fix
         XCTAssertEqual(decoded.count, 1)
-        XCTAssertEqual(decoded.first, Simple.fix)
+        XCTAssertEqual(decoded.first, Simple.fixOverride)
     }
 
     func testSetOfSimples() {
         let decoded = Set<Simple>.fix
         XCTAssertEqual(decoded.count, 1)
-        XCTAssertEqual(decoded.first, Simple.fix)
+        XCTAssertEqual(decoded.first, Simple.fixOverride)
     }
 
     func testGeneric() {
@@ -95,7 +97,7 @@ final class AutofixturesTests: XCTestCase {
             var name: String
         }
         let fix = Auto.fix
-            .prop(\.name, "updated")
+            .set(\.name, "updated")
         XCTAssertEqual(fix.name, "updated")
     }
 
@@ -125,6 +127,7 @@ struct Closure<A,B>: Decodable {
 
 /// Example of setting up default for closure
 extension Closure: Override where A == Void, B == Int {
-    static var fix: Closure<(), Int> = .fix
-        .prop(\.closure, { return 9 })
+    static var fixOverride: Closure<(), Int> = .fixDecoded
+        .set(\.closure, { return 9 })
+}
 }
