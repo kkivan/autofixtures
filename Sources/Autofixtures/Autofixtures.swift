@@ -11,7 +11,7 @@ public protocol Override: Decodable {
     static var fixOverride: Self { get }
 }
 
-extension Override where Self: CaseIterable {
+public extension Override where Self: CaseIterable {
     static var fixOverride: Self { Self.allCases.first! }
 }
 

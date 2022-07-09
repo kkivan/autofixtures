@@ -1,5 +1,5 @@
 import XCTest
-@testable import Autofixtures
+import Autofixtures
 
 enum Enum: String, Decodable, CaseIterable {
     case one
