@@ -1,5 +1,5 @@
 # Autofixtures
-[![CI](https://github.com/kkivan/autofixtures/workflows/Swift/badge.svg)](https://github.com/kkivan/autofixtures/actions?query=workflow%3ASwift)  
+[![CI](https://github.com/kkivan/autofixtures/workflows/CI/badge.svg)](https://github.com/kkivan/autofixtures/actions?query=workflow%3ACI)  
 Autofixtures for your swift code
 
 # Motivation
