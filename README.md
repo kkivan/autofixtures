@@ -1,6 +1,6 @@
 # Autofixtures
 [![CI](https://github.com/kkivan/autofixtures/workflows/CI/badge.svg)](https://github.com/kkivan/autofixtures/actions?query=workflow%3ACI)  
-Autofixtures for your swift code
+Fixtures for Swift
 
 # Motivation
 During testing or development we ususally need to create mock models (fixtures) to pass them as arguments.  
