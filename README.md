@@ -3,8 +3,8 @@
 Fixtures for Swift
 
 # Motivation
-During testing or development we ususally need to create mock models (fixtures) to pass them as arguments.  
-The models tend to become very complex and cumbersome to create every time, so you may come up with static method to create models.  
+During testing or development, we usually need to create mock models (fixtures) to pass them as arguments.  
+The models tend to become very complex and cumbersome to create every time, so you may come up with a static method to create models.  
 For example:
 ```
 struct User {
@@ -18,7 +18,7 @@ struct User {
   let address: Address
 }
 ```
-You can come up with something like this
+You can come up with something like this.
 ```
 extension User {
   static func fixture(id: Int = 11,
@@ -40,11 +40,11 @@ extension Address {
   }
 }
 ```
-This is much better than creating models inline everytime, but it's a lot of boilerplate code, that needs to be compiled and maintained every time we change our models.
+This is much better than creating models inline every time, but it's a lot of boilerplate code, that needs to be compiled and maintained every time we change our models.
 
 # Usage
 ## Basic
-With Autofixtures all you need to do is comform your model to Decodable (if it doesn't yet), and import Autofixtures
+With Autofixtures, all you need to do is conform your model to Decodable (if it doesn't yet), and import Autofixtures
 ```
 import Autofixtures
 extension User: Decodable {}
@@ -61,8 +61,8 @@ extension User: Decodable {}
 let fixture = User.fix.set(\.address.road, "Abbey Road")
 ```
 ## Customize fixtures
-Conform your model to Autofixtures.Override protocol and provide a new default.  
-Use .fixDecoded static var to avoid infinite recursion
+Conform your model to Autofixtures. Override protocol and provide a new default.  
+Use .fixDecoded static var to avoid infinite recursion.
 ```
 extension User: Override {
   static var fixOverride = User.fixDecoded.set(\.address.road, "Abbey Road")
@@ -70,7 +70,7 @@ extension User: Override {
 let fixture = User.fix
 ```
 ## Enums
-CaseIterable enums return first case from .fix, but they need to conform to Override 
+CaseIterable enums return the first case from .fix, but they need to conform to Override 
 ```
 enum Enum: String, Decodable, CaseIterable {
     case one
@@ -80,7 +80,7 @@ enum Enum: String, Decodable, CaseIterable {
 extension Enum: Override {}
 ```
 ## Enums with associated values
-Enums with associated values require to provide override
+Enums with associated values require to provide the override.
 ```
 enum EnumWithValue: Decodable, Equatable, Override {
     case value(Simple)
