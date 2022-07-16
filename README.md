@@ -1,7 +1,7 @@
 # Autofixtures
 [![CI](https://github.com/kkivan/autofixtures/workflows/CI/badge.svg)](https://github.com/kkivan/autofixtures/actions?query=workflow%3ACI)
-[![Swift 5.0](https://img.shields.io/badge/swift-5.0-ED523F.svg?style=flat)](https://swift.org/download/)  
-
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fkkivan%2Fautofixtures%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/kkivan/autofixtures)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fkkivan%2Fautofixtures%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/kkivan/autofixtures)
 ## What is Autofixtures?
 Autofixtures is a utility library that helps to create models for your test suite. 
 With Autofixtures you dont need to write boilerplate code to create your models.
