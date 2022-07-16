@@ -120,6 +120,16 @@ extension Closure: Override where A == Void, B == Int {
 }
 ```
 
-# Installation
+## Installation
 
-Swift Package Manager
+You can add Autofixtures to an Xcode project by adding it as a package dependency.
+
+> https://github.com/kkivan/autofixtures
+
+If you want to use Autofixtures in a [SwiftPM](https://swift.org/package-manager/) project, it's as simple as adding it to a `dependencies` clause in your `Package.swift`:
+
+``` swift
+dependencies: [
+  .package(url: "https://github.com/kkivan/autofixtures", from: "0.0.3")
+]
+```
