@@ -112,7 +112,7 @@ final class AutofixturesTests: XCTestCase {
         struct WithClosure: Decodable {
             let closure: Closure<Void, Int>
         }
-        XCTAssertEqual(WithClosure.fix.closure.closure(()), 9)
+        XCTAssertEqual(WithClosure.fix.closure(()), 9)
     }
 }
 
@@ -122,6 +122,10 @@ struct Closure<A,B>: Decodable {
 
     init(from decoder: Decoder) throws {
         self.closure = { a in fatalError() }
+    }
+
+    func callAsFunction(_ a: A) -> B {
+        closure(a)
     }
 }
 
