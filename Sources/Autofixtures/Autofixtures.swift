@@ -14,13 +14,22 @@ public protocol Override: Decodable {
 /// Convinience conformance for CaseIterable Enums
 /// - returns first declared case
 public extension Override where Self: CaseIterable {
-    static var fixOverride: Self { Self.allCases.first! }
+    static var fixOverride: Self {
+        guard let first = Self.allCases.first else {
+            fatalError("Provide at least one case in \(Self.self).allCases")
+        }
+        return first
+    }
 }
 
 public extension Decodable {
     /// Use this method when you want to create an override for a type
     static var fixDecoded: Self {
-        try! .init(from: FixtureDecoder())
+        do {
+            return try .init(from: FixtureDecoder())
+        } catch {
+            fatalError(message(Self.self))
+        }
     }
 
     /// Prefer this method for creating fixtures

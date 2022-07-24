@@ -7,13 +7,11 @@ struct FixtureDecoder: Decoder {
 
     struct KeyedContainer<Key: CodingKey>: KeyedDecodingContainerProtocol {
         let allKeys: [Key]
-        let codingPath: [CodingKey]
-        let decoder: FixtureDecoder
+        let codingPath: [CodingKey] = []
 
         init(decoder: FixtureDecoder) {
             self.allKeys = [.init(stringValue: "FIX")].compactMap { $0 }
-            self.codingPath = decoder.codingPath
-            self.decoder = decoder
+
         }
 
         func contains(_ key: Key) -> Bool {
@@ -57,7 +55,7 @@ struct FixtureDecoder: Decoder {
         }
 
         mutating func decode(_ type: Bool.Type) throws -> Bool {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         var codingPath: [CodingKey] = []
@@ -69,19 +67,19 @@ struct FixtureDecoder: Decoder {
         var currentIndex: Int = 0
 
         mutating func decodeNil() throws -> Bool {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         mutating func nestedUnkeyedContainer() throws -> UnkeyedDecodingContainer {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         mutating func superDecoder() throws -> Decoder {
-            fatalError()
+            fatalError("Not implemented")
         }
     }
 
@@ -134,4 +132,22 @@ struct FixtureDecoder: Decoder {
     func singleValueContainer() throws -> SingleValueDecodingContainer {
         SingleValueContainer()
     }
+}
+
+func message<T>(_ type: T.Type) -> String {
+    return """
+    ---Override is not provided----
+    You see this error because because fixture for \(type) cannot be created
+    It's probably an enum type
+    If \(type) is CaseIterable declare protocol conformance to get first enum case as a fixture
+    ```
+    extension \(type): Override {}
+    ```
+    Otherwise provide an override for fixture
+    ```
+    extension \(type): Override {
+        static var fixOverride: Self = ...create fixture here...
+    }
+    ```
+    """
 }
