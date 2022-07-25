@@ -89,9 +89,7 @@ struct FixtureDecoder: Decoder {
             true
         }
 
-        func decode(_ type: Bool.Type) throws -> Bool {
-            true
-        }
+        func decode(_ type: Bool.Type) throws -> Bool { false }
 
         func decode(_ type: String.Type) throws -> String { "FIX" }
 

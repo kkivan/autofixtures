@@ -27,6 +27,7 @@ final class AutofixturesTests: XCTestCase {
 
     func testSingleValues() {
         XCTAssertEqual(String.fix, "FIX")
+        XCTAssertEqual(Bool.fix, false)
         XCTAssertEqual(Int.fix, 333)
         XCTAssertEqual(Double.fix, 1.1)
         XCTAssertEqual(Float.fix, 1.2)
