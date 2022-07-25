@@ -105,7 +105,7 @@ final class AutofixturesTests: XCTestCase {
         XCTAssertEqual([String: Simple].fix, [.fix: .fix])
     }
 
-    func testProp() {
+    func testSet() {
         struct Auto: Decodable {
             var name: String
         }
