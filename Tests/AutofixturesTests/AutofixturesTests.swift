@@ -1,5 +1,5 @@
-import XCTest
 import Autofixtures
+import XCTest
 
 enum Enum: String, Decodable, CaseIterable {
     case one
@@ -20,15 +20,26 @@ struct Nested: Decodable {
 }
 
 extension Simple: Override {
-    static var fixOverride: Simple = Simple.fixDecoded.set(\.string, "NAME")
+    static var fixOverride: Simple = .fixDecoded.set(\.string, "NAME")
 }
 
 final class AutofixturesTests: XCTestCase {
 
-    func testAtomic() {
+    func testSingleValues() {
         XCTAssertEqual(String.fix, "FIX")
         XCTAssertEqual(Int.fix, 333)
+        XCTAssertEqual(Double.fix, 1.1)
+        XCTAssertEqual(Float.fix, 1.2)
         XCTAssertEqual(Int.fix, 333)
+        XCTAssertEqual(Int8.fix, 8)
+        XCTAssertEqual(Int16.fix, 16)
+        XCTAssertEqual(Int32.fix, 32)
+        XCTAssertEqual(Int64.fix, 64)
+        XCTAssertEqual(UInt.fix, 333)
+        XCTAssertEqual(UInt8.fix, 111)
+        XCTAssertEqual(UInt16.fix, 333)
+        XCTAssertEqual(UInt32.fix, 333)
+        XCTAssertEqual(UInt64.fix, 333)
     }
 
     func testStruct() {
@@ -49,6 +60,7 @@ final class AutofixturesTests: XCTestCase {
         XCTAssertEqual(decoded.count, 1)
         XCTAssertEqual(decoded[0], String.fix)
     }
+
     func testArrayOfSimples() {
         let decoded = [Simple].fix
         XCTAssertEqual(decoded.count, 1)
@@ -84,7 +96,7 @@ final class AutofixturesTests: XCTestCase {
     }
 
     func testOptional() {
-        XCTAssertEqual(Optional<Simple>.fix, nil)
+        XCTAssertEqual(Simple?.fix, nil)
     }
 
     func testStringDictionary() {
@@ -117,11 +129,11 @@ final class AutofixturesTests: XCTestCase {
 }
 
 /// Closure wrapper for decodable support
-struct Closure<A,B>: Decodable {
+struct Closure<A, B>: Decodable {
     var closure: (A) -> B
 
     init(from decoder: Decoder) throws {
-        self.closure = { a in fatalError() }
+        self.closure = { _ in fatalError() }
     }
 
     func callAsFunction(_ a: A) -> B {

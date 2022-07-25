@@ -11,7 +11,6 @@ struct FixtureDecoder: Decoder {
 
         init(decoder: FixtureDecoder) {
             self.allKeys = [.init(stringValue: "FIX")].compactMap { $0 }
-
         }
 
         func contains(_ key: Key) -> Bool {
@@ -27,19 +26,19 @@ struct FixtureDecoder: Decoder {
         }
 
         func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         func superDecoder() throws -> Decoder {
-            fatalError()
+            fatalError("Not implemented")
         }
 
         func superDecoder(forKey key: Key) throws -> Decoder {
-            fatalError()
+            fatalError("Not implemented")
         }
     }
 
@@ -137,7 +136,7 @@ struct FixtureDecoder: Decoder {
 extension String {
     func repeating(_ times: Int) -> String {
         let arr = Array(repeating: self, count: times)
-        return String(arr.reduce("", +))
+        return arr.reduce("", +)
     }
     func fixed(_ length: Int) -> String {
         if count < length {
