@@ -134,20 +134,41 @@ struct FixtureDecoder: Decoder {
     }
 }
 
-func message<T>(_ type: T.Type) -> String {
-    return """
-    ---Override is not provided----
-    You see this error because because fixture for \(type) cannot be created
-    It's probably an enum type
-    If \(type) is CaseIterable declare protocol conformance to get first enum case as a fixture
-    ```
-    extension \(type): Override {}
-    ```
-    Otherwise provide an override for fixture
-    ```
-    extension \(type): Override {
-        static var fixOverride: Self = ...create fixture here...
+extension String {
+    func repeating(_ times: Int) -> String {
+        let arr = Array(repeating: self, count: times)
+        return String(arr.reduce("", +))
     }
-    ```
+    func fixed(_ length: Int) -> String {
+        if count < length {
+            return self + " ".repeating(length - count)
+        }
+
+        return self
+    }
+}
+
+func message<T>(_ type: T.Type) -> String {
+    let lineCount = 92
+    let codeLineCount = 88
+    return """
+    \n
+    ╭─────────────────────────────────────────────────────────────────────────────────────────────╮
+    │ ◎ ○ ○ ░░░░░░░░░░░░░░░░░░░░░░░░░░░  Override is not provided  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+    ├─────────────────────────────────────────────────────────────────────────────────────────────┤
+    │ \("You see this error because because fixture for \(type) cannot be created".fixed(lineCount))│
+    │ It's probably an enum type                                                                  │
+    │ \("If \(type) is CaseIterable".fixed(lineCount))│
+    │ declare protocol conformance to get first enum case as a fixture                            │
+    │ ┌─────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │ │ \("extension \(type): Override {}".fixed(codeLineCount))│ │
+    │ └─────────────────────────────────────────────────────────────────────────────────────────┘ │
+    │ Otherwise provide an override for fixture                                                   │
+    │ ┌─────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │ │ \("extension \(type): Override {".fixed(codeLineCount))│ │
+    │ │    static var fixOverride: Self = ...create fixture here...                             │ │
+    │ │ }                                                                                       │ │
+    │ └─────────────────────────────────────────────────────────────────────────────────────────┘ │
+    └─────────────────────────────────────────────────────────────────────────────────────────────┘
     """
 }
