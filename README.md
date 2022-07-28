@@ -132,6 +132,6 @@ If you want to use Autofixtures in a [SwiftPM](https://swift.org/package-manager
 
 ``` swift
 dependencies: [
-  .package(url: "https://github.com/kkivan/autofixtures", from: "0.0.3")
+  .package(url: "https://github.com/kkivan/autofixtures", from: "0.0.5")
 ]
 ```
