@@ -56,8 +56,6 @@ This is much better than creating models inline every time, but it's a lot of bo
 ## Basic
 With Autofixtures, all you need to do is conform your model to Decodable (if it doesn't yet), and import Autofixtures
 ```
-import Autofixtures
-
 extension User: Decodable {}
 
 let fixture = User.fix
@@ -66,8 +64,6 @@ let fixture = User.fix
 ## Setter
 To set a value
 ```
-import Autofixtures
-
 extension User: Decodable {}
 
 let fixture = User.fix.set(\.address.road, "Abbey Road")
