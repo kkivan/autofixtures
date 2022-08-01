@@ -9,7 +9,7 @@ struct FixtureDecoder: Decoder {
         let allKeys: [Key]
         let codingPath: [CodingKey] = []
 
-        init(decoder: FixtureDecoder) {
+        init() {
             self.allKeys = [.init(stringValue: "FIX")].compactMap { $0 }
         }
 
@@ -34,7 +34,7 @@ struct FixtureDecoder: Decoder {
         }
 
         func superDecoder() throws -> Decoder {
-            fatalError("Not implemented")
+            FixtureDecoder()
         }
 
         func superDecoder(forKey key: Key) throws -> Decoder {
@@ -43,7 +43,7 @@ struct FixtureDecoder: Decoder {
     }
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key : CodingKey {
-        return .init(KeyedContainer(decoder: self))
+        return .init(KeyedContainer())
     }
 
     struct UnkeyedContainer: UnkeyedDecodingContainer {

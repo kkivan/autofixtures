@@ -6,8 +6,6 @@ enum Enum: String, Decodable, CaseIterable {
     case two
 }
 
-extension Enum: Override {}
-
 struct Simple: Decodable, Hashable, Equatable {
     var id: Int
     var double: Double

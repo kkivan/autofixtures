@@ -22,6 +22,17 @@ public extension Override where Self: CaseIterable {
     }
 }
 
+public extension Decodable where Self: CaseIterable {
+    static var fixDecoded: Self { .allCases.first! }
+
+    static var fix: Self {
+        guard let override = self as? Override.Type else {
+            return .fixDecoded
+        }
+        return override.fixOverride as! Self
+    }
+}
+
 public extension Decodable {
     /// Use this method when you want to create an override for a type
     static var fixDecoded: Self {
@@ -48,5 +59,16 @@ public extension Decodable {
         var copy = self
         copy[keyPath: kp] = value
         return copy
+    }
+}
+
+
+public extension KeyedDecodingContainer {
+    func decode<P: CaseIterable>(_: P.Type, forKey key: Key) throws -> P where P: Decodable {
+        let decoder = try superDecoder()
+        if decoder is FixtureDecoder {
+            return P.fix
+        }
+        return try P.init(from: decoder)
     }
 }
