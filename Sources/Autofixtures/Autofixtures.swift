@@ -64,11 +64,11 @@ public extension Decodable {
 
 
 public extension KeyedDecodingContainer {
-    func decode<P: CaseIterable>(_: P.Type, forKey key: Key) throws -> P where P: Decodable {
+    func decode<C: CaseIterable>(_: C.Type, forKey key: Key) throws -> C where C: Decodable {
         let decoder = try superDecoder()
         if decoder is FixtureDecoder {
-            return P.fix
+            return C.fix
         }
-        return try P.init(from: decoder)
+        return try C.init(from: decoder)
     }
 }
