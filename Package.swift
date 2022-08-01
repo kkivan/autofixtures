@@ -15,8 +15,10 @@ let package = Package(
         .target(
             name: "Autofixtures",
             dependencies: []),
+        .target(name: "ExampleModels",
+                dependencies: []),
         .testTarget(
             name: "AutofixturesTests",
-            dependencies: ["Autofixtures"]),
+            dependencies: ["Autofixtures","ExampleModels"]),
     ]
 )

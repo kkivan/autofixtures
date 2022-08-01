@@ -61,14 +61,3 @@ public extension Decodable {
         return copy
     }
 }
-
-
-public extension KeyedDecodingContainer {
-    func decode<C: CaseIterable>(_: C.Type, forKey key: Key) throws -> C where C: Decodable {
-        let decoder = try superDecoder()
-        if decoder is FixtureDecoder {
-            return C.fix
-        }
-        return try C.init(from: decoder)
-    }
-}

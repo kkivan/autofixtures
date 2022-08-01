@@ -131,6 +131,10 @@ struct FixtureDecoder: Decoder {
     }
 }
 
+extension Decimal: Override {
+    static public var fixOverride: Decimal = .init(Double.fix)
+}
+
 extension String {
     func repeating(_ times: Int) -> String {
         let arr = Array(repeating: self, count: times)

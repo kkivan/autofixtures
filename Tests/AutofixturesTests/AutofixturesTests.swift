@@ -1,5 +1,6 @@
 import Autofixtures
 import XCTest
+import ExampleModels
 
 enum Enum: String, Decodable, CaseIterable {
     case one
@@ -21,9 +22,22 @@ extension Simple: Override {
     static var fixOverride: Simple = .fixDecoded.set(\.string, "NAME")
 }
 
+extension ExampleType: Override {}
+extension Enum: Override {}
+
 final class AutofixturesTests: XCTestCase {
 
-    func testSingleValues() {
+    func testDecimal() {
+        XCTAssertEqual(Decimal.fix, Decimal(Double.fix))
+    }
+
+    func test3rdPartyModels() {
+        let model = Model.fix
+        XCTAssertEqual(model.type, .one)
+        XCTAssertEqual(model.string, "FIX")
+    }
+
+    func testSingleValues() throws {
         XCTAssertEqual(String.fix, "FIX")
         XCTAssertEqual(Bool.fix, false)
         XCTAssertEqual(Int.fix, 333)
@@ -124,6 +138,10 @@ final class AutofixturesTests: XCTestCase {
             let closure: Closure<Void, Int>
         }
         XCTAssertEqual(WithClosure.fix.closure(()), 9)
+    }
+
+    func testThatJSONDecoderWorksAsExpected() {
+
     }
 }
 
